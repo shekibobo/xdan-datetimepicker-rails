@@ -9,15 +9,14 @@ Gem::Specification.new do |gem|
   gem.authors       = ["Joshua Kovach"]
   gem.email         = ["kovach.jc@gmail.com"]
   gem.summary       = %q{XDan's jQuery DateTimePicker packaged for the Rails Asset Pipeline}
-  gem.description   = %q{}
+  gem.description   = gem.description
   gem.homepage      = "https://www.github.com/shekibobo/xdan-datetimepicker-rails"
   gem.license       = "MIT"
 
-  gem.files = Dir['{app,lib,vendor}/**/*'] + %w[Rakefile README.md]
-  gem.require_paths = ["lib"]
+  gem.files = Dir['{app,lib,vendor}/**/*'] + %w[Rakefile README.md LICENSE.txt]
 
-  gem.add_dependency 'jquery-rails'
   gem.add_dependency 'rails', '>= 3.2.16'
+  gem.add_dependency 'jquery-rails'
 
   gem.add_development_dependency "bundler", "~> 1.5"
   gem.add_development_dependency "rake"
