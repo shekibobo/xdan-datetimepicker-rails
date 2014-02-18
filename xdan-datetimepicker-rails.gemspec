@@ -9,7 +9,7 @@ Gem::Specification.new do |gem|
   gem.authors       = ["Joshua Kovach"]
   gem.email         = ["kovach.jc@gmail.com"]
   gem.summary       = %q{XDan's jQuery DateTimePicker packaged for the Rails Asset Pipeline}
-  gem.description   = gem.description
+  gem.description   = gem.summary
   gem.homepage      = "https://www.github.com/shekibobo/xdan-datetimepicker-rails"
   gem.license       = "MIT"
 
