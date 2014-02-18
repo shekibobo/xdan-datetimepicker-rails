@@ -1,6 +1,6 @@
 # Xdan Datetimepicker Rails
 
-This gem adds @xdan's [datetimepicker] to the Rails asset pipeline.
+This gem adds @xdan's [datetimepicker](https://github.com/xdan/datetimepicker) to the Rails asset pipeline.
 
 ## Installation
 
@@ -36,6 +36,12 @@ Start using it!
 $ ->
   $(".datetimepicker").datetimepicker()
 ```
+
+See the [detailed documentation](http://xdsoft.net/jqplugins/datetimepicker/) for more options. When the site is back up I'll try to port some of them into this README or move them to the official repo of [datetimepicker](https://github.com/xdan/datetimepicker).
+
+## Versioning
+
+This gem will attempt to maintain the same version as the `datetimepicker` library.
 
 ## Contributing
 
