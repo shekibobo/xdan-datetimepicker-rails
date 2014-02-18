@@ -13,7 +13,8 @@ Gem::Specification.new do |gem|
   gem.homepage      = "https://www.github.com/shekibobo/xdan-datetimepicker-rails"
   gem.license       = "MIT"
 
-  gem.files = Dir['{lib,vendor}/**/*'] + %w[Rakefile README.md LICENSE.txt]
+  gem.files = Dir['{app,lib,vendor}/**/*'] + %w[Rakefile README.md LICENSE.txt]
+  gem.require_paths = ["lib"]
 
   gem.add_dependency 'rails', '>= 3.2.16'
   gem.add_dependency 'jquery-rails'
