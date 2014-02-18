@@ -1,6 +1,6 @@
-# Xdan::Datetimepicker::Rails
+# Xdan Datetimepicker Rails
 
-TODO: Write a gem description
+This gem adds @xdan's [datetimepicker] to the Rails asset pipeline.
 
 ## Installation
 
@@ -18,7 +18,24 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Require the jquery file into your `application.js.coffee` file:
+
+```coffee
+#= require jquery.xdan.datetimepicker
+```
+
+Import the stylesheet in your `application.css.scss` file:
+
+```sass
+@import "jquery.xdan.datetimepicker";
+```
+
+Start using it!
+
+```coffee
+$ ->
+  $(".datetimepicker").datetimepicker()
+```
 
 ## Contributing
 
