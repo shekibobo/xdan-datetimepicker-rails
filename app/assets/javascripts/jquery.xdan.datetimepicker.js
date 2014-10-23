@@ -1,8 +1,9 @@
 /**
- * @preserve jQuery DateTimePicker plugin v2.3.8
+ * @preserve jQuery DateTimePicker plugin v2.3.9
  * @homepage http://xdsoft.net/jqplugins/datetimepicker/
  * (c) 2014, Chupurnov Valeriy.
  */
+/*global document,window,jQuery,setTimeout,clearTimeout*/
 (function ($) {
 	'use strict';
 	var default_options  = {
@@ -302,8 +303,11 @@
 		roundTime: 'round', // ceil, floor
 		className: '',
 		weekends: [],
+		disabledDates : [],
 		yearOffset: 0,
-		beforeShowDay: null
+		beforeShowDay: null,
+
+		enterLikeTab: true
 	};
 	// fix for ie8
 	if (!Array.prototype.indexOf) {
@@ -348,7 +352,10 @@
 				touchStart = false,
 				startTopScroll = 0,
 				calcOffset = function () {};
-
+			if (percent === 'hide') {
+				timeboxparent.find('.xdsoft_scrollbar').hide();
+				return;
+			}
 			if (!$(this).hasClass('xdsoft_scroller_box')) {
 				timebox = timeboxparent.children().eq(0);
 				parentHeight = timeboxparent[0].clientHeight;
@@ -532,8 +539,8 @@
 				timepicker = $('<div class="xdsoft_timepicker active"><button type="button" class="xdsoft_prev"></button><div class="xdsoft_time_box"></div><button type="button" class="xdsoft_next"></button></div>'),
 				timeboxparent = timepicker.find('.xdsoft_time_box').eq(0),
 				timebox = $('<div class="xdsoft_time_variant"></div>'),
-				scrollbar = $('<div class="xdsoft_scrollbar"></div>'),
-				scroller = $('<div class="xdsoft_scroller"></div>'),
+				/*scrollbar = $('<div class="xdsoft_scrollbar"></div>'),
+				scroller = $('<div class="xdsoft_scroller"></div>'),*/
 				monthselect = $('<div class="xdsoft_select xdsoft_monthselect"><div></div></div>'),
 				yearselect = $('<div class="xdsoft_select xdsoft_yearselect"><div></div></div>'),
 				triggerAfterOpen = false,
@@ -620,6 +627,10 @@
 					options.weekends = $.extend(true, [], _options.weekends);
 				}
 
+				if (_options.disabledDates && $.isArray(_options.disabledDates) && _options.disabledDates.length) {
+                    options.disabledDates = $.extend(true, [], _options.disabledDates);
+                }
+
 				if ((options.open || options.opened) && (!options.inline)) {
 					input.trigger('open.xdsoft');
 				}
@@ -661,7 +672,7 @@
 				}
 
 				if (!options.timepickerScrollbar) {
-					scrollbar.hide();
+					timeboxparent.xdsoftScroller('hide');
 				}
 
 				if (options.minDate && /^-(.*)$/.test(options.minDate)) {
@@ -1143,6 +1154,8 @@
 
 							if ((maxDate !== false && start > maxDate) || (minDate !== false && start < minDate) || (customDateSettings && customDateSettings[0] === false)) {
 								classes.push('xdsoft_disabled');
+							} else if (options.disabledDates.indexOf(start.dateFormat(options.formatDate)) !== -1) {
+								classes.push('xdsoft_disabled');
 							}
 
 							if (customDateSettings && customDateSettings[1] !== "") {
@@ -1534,7 +1547,7 @@
 				.on('keydown.xdsoft', function (event) {
 					var val = this.value, elementSelector,
 						key = event.which;
-					if ([ENTER].indexOf(key) !== -1) {
+					if ([ENTER].indexOf(key) !== -1 && options.enterLikeTab) {
 						elementSelector = $("input:visible,textarea:visible");
 						datetimepicker.trigger('close.xdsoft');
 						elementSelector.eq(elementSelector.index(this) + 1).focus();
