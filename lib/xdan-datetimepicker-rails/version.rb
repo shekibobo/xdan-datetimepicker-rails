@@ -1,3 +1,3 @@
 module XdanDatetimepickerRails
-  VERSION = '2.3.9'
+  VERSION = '2.4.1'
 end
