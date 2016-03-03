@@ -11,6 +11,8 @@ namespace :source do
     new_version = ENV["version"] || "master"
     puts "Downloading jquery.datetimepicker.js..."
     download "https://raw.github.com/xdan/datetimepicker/#{new_version}/jquery.datetimepicker.js", "app/assets/javascripts/jquery.xdan.datetimepicker.js"
+    puts "Downloading jquery.datetimepicker.full.js..."
+    download "https://raw.github.com/xdan/datetimepicker/#{new_version}/build/jquery.datetimepicker.full.js", "app/assets/javascripts/jquery.xdan.datetimepicker.full.js"
 
     puts "Downloading jquery.datetimepicker.css..."
     download "https://raw.github.com/xdan/datetimepicker/#{new_version}/jquery.datetimepicker.css", "app/assets/stylesheets/jquery.xdan.datetimepicker.css"
