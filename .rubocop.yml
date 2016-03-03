@@ -1,0 +1,99 @@
+AllCops:
+  TargetRubyVersion: 2.3
+  Rails:
+    Enabled: true
+  Exclude:
+    - 'db/schema.rb'
+
+#################
+# [i] Overrides #
+#################
+
+CollectionMethods:
+  # Mapping from undesired method to desired_method
+  # e.g. to use `detect` over `find`:
+  #
+  # CollectionMethods:
+  #   PreferredMethods:
+  #     find: detect
+  PreferredMethods:
+    reduce: 'inject'
+    find: 'detect'
+    each_with_index: 'each.with_index'
+
+# Align ends correctly.
+EndAlignment:
+  AlignWith: variable
+
+IfUnlessModifier:
+  MaxLineLength: 75
+
+LineLength:
+  Max: 200
+
+SignalException:
+  EnforcedStyle: only_raise
+
+SpaceInsideBlockBraces:
+  SpaceBeforeBlockParameters: true
+
+BracesAroundHashParameters:
+  EnforcedStyle: context_dependent
+
+StringLiterals:
+  EnforcedStyle: double_quotes
+
+#################
+# Disabled cops #
+#################
+Metrics/ClassLength:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
+
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/EachWithObject:
+  Enabled: false
+
+Style/FormatString:
+  Enabled: false
+
+Style/Lambda:
+  Enabled: false
+
+Style/NegatedIf:
+  Enabled: false
+
+Style/Semicolon:
+  Enabled: false
+
+Style/SingleLineBlockParams:
+  Enabled: false
+
+Style/TrailingCommaInLiteral:
+  Enabled: true
+  EnforcedStyleForMultiline: comma
+
+Style/TrailingCommaInArguments:
+  Enabled: true
+  EnforcedStyleForMultiline: comma
+
+Style/WordArray:
+  Enabled: false
+
+# HABTM still has a place.
+# http://collectiveidea.com/blog/archives/2014/08/11/has_and_belongs_to_many-isnt-dead/
+Rails/HasAndBelongsToMany:
+  Enabled: false
+
+Performance/RedundantMerge:
+  Enabled: false
