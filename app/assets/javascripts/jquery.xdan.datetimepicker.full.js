@@ -575,7 +575,7 @@ var DateFormatter;
         }
     };
 })();/**
- * @preserve jQuery DateTimePicker plugin v2.5.1
+ * @preserve jQuery DateTimePicker plugin v2.5.4
  * @homepage http://xdsoft.net/jqplugins/datetimepicker/
  * @author Chupurnov Valeriy (<chupurnov@gmail.com>)
  */
@@ -1501,7 +1501,8 @@ var DateFormatter;
 				setPos,
 				timer = 0,
 				_xdsoft_datetime,
-				forEachAncestorOf;
+				forEachAncestorOf,
+				throttle;
 
 			if (options.id) {
 				datetimepicker.attr('id', options.id);
@@ -1755,21 +1756,23 @@ var DateFormatter;
 							if (options.allowBlank && (!$.trim($(this).val()).length || (typeof options.mask == "string" && $.trim($(this).val()) === options.mask.replace(/[0-9]/g, '_')))) {
 								$(this).val(null);
 								datetimepicker.data('xdsoft_datetime').empty();
-							} else if (!dateHelper.parseDate($(this).val(), options.format)) {
-								var splittedHours   = +([$(this).val()[0], $(this).val()[1]].join('')),
-									splittedMinutes = +([$(this).val()[2], $(this).val()[3]].join(''));
-
-								// parse the numbers as 0312 => 03:12
-								if (!options.datepicker && options.timepicker && splittedHours >= 0 && splittedHours < 24 && splittedMinutes >= 0 && splittedMinutes < 60) {
-									$(this).val([splittedHours, splittedMinutes].map(function (item) {
-										return item > 9 ? item : '0' + item;
-									}).join(':'));
-								} else {
-									$(this).val(dateHelper.formatDate(_xdsoft_datetime.now(), options.format));
-								}
-
-								datetimepicker.data('xdsoft_datetime').setCurrentTime($(this).val());
 							} else {
+								var d = dateHelper.parseDate($(this).val(), options.format);
+								if (d) { // parseDate() may skip some invalid parts like date or time, so make it clear for user: show parsed date/time
+									$(this).val(dateHelper.formatDate(d, options.format));
+								} else {
+									var splittedHours   = +([$(this).val()[0], $(this).val()[1]].join('')),
+										splittedMinutes = +([$(this).val()[2], $(this).val()[3]].join(''));
+	
+									// parse the numbers as 0312 => 03:12
+									if (!options.datepicker && options.timepicker && splittedHours >= 0 && splittedHours < 24 && splittedMinutes >= 0 && splittedMinutes < 60) {
+										$(this).val([splittedHours, splittedMinutes].map(function (item) {
+											return item > 9 ? item : '0' + item;
+										}).join(':'));
+									} else {
+										$(this).val(dateHelper.formatDate(_xdsoft_datetime.now(), options.format));
+									}
+								}
 								datetimepicker.data('xdsoft_datetime').setCurrentTime($(this).val());
 							}
 
@@ -1852,8 +1855,20 @@ var DateFormatter;
 					return !isNaN(d.getTime());
 				};
 
-				_this.setCurrentTime = function (dTime) {
-					_this.currentTime = (typeof dTime === 'string') ? _this.strToDateTime(dTime) : _this.isValidDate(dTime) ? dTime : _this.now();
+				_this.setCurrentTime = function (dTime, requireValidDate) {
+					if (typeof dTime === 'string') {
+						_this.currentTime = _this.strToDateTime(dTime);
+					}
+					else if (_this.isValidDate(dTime)) {
+						_this.currentTime = dTime;
+					}
+					else if (!dTime && !requireValidDate && options.allowBlank) {
+						_this.currentTime = null;
+					}
+					else {
+						_this.currentTime = _this.now();
+					}
+					
 					datetimepicker.trigger('xchange.xdsoft');
 				};
 
@@ -2006,7 +2021,7 @@ var DateFormatter;
 				.find('.xdsoft_today_button')
 				.on('touchend mousedown.xdsoft', function () {
 					datetimepicker.data('changed', true);
-					_xdsoft_datetime.setCurrentTime(0);
+					_xdsoft_datetime.setCurrentTime(0, true);
 					datetimepicker.trigger('afterOpen.xdsoft');
 				}).on('dblclick.xdsoft', function () {
 					var currentDate = _xdsoft_datetime.getCurrentTime(), minDate, maxDate;
@@ -2103,6 +2118,10 @@ var DateFormatter;
 					xchangeTimer = setTimeout(function () {
 
 						if (_xdsoft_datetime.currentTime === undefined || _xdsoft_datetime.currentTime === null) {
+							//In case blanks are allowed, delay construction until we have a valid date 
+							if (options.allowBlank)
+								return;
+								
 							_xdsoft_datetime.currentTime = _xdsoft_datetime.now();
 						}
 
@@ -2828,7 +2847,7 @@ var DateFormatter;
 						}
 
 						triggerAfterOpen = true;
-						_xdsoft_datetime.setCurrentTime(getCurrentValue());
+						_xdsoft_datetime.setCurrentTime(getCurrentValue(), true);
 						if(options.mask) {
 							setMask(options);
 						}
